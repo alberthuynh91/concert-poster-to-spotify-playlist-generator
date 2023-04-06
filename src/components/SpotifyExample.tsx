@@ -88,7 +88,7 @@ const addTracksToPlaylist = async (playlistId: string, uris: string[]) => {
 };
 
 const SpotifyExample = (props) => {
-  const { currentData } = props;
+  const { currentData, isLoading, setIsLoading } = props;
   console.log(`what is currentData in spotifyexmaple: `, currentData);
   const { data: session } = useSession();
   const [tracks, setTracks] = useState([]);
@@ -124,6 +124,7 @@ const SpotifyExample = (props) => {
   if (currentData.length === 0) return null;
   return (
     <>
+      {isLoading && <div>hi</div>}
       <Artists artists={currentData} />
       <button onClick={handleSave}>Create playlist</button>
       <button onClick={handleAdd}>Add songs to playlist</button>

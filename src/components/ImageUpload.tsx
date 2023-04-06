@@ -95,6 +95,7 @@ const ImageUpload = (props) => {
 
   const doOCR = async (file) => {
     setIsProcessing(true);
+    setIsLoading(true);
     await workerRef.current.load();
     await workerRef.current.loadLanguage('eng');
     await workerRef.current.initialize('eng');
@@ -107,13 +108,13 @@ const ImageUpload = (props) => {
     const {
       data: { text },
     } = response;
-    console.log(`finished processing: `, response);
     setOcrText(text);
     const artistStrings = parseArtistsFromOcrString(text);
     const artistObjectList = await getArtistList(artistStrings);
     setCurrentData(artistObjectList);
     console.log(`>>>>>> what is artistObjectList: `, artistObjectList);
     setIsProcessing(false);
+    setIsLoading(false);
   };
 
   const updateProgressAndLog = (m) => {
