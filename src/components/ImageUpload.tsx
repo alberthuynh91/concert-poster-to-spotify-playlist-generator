@@ -82,11 +82,13 @@ const getArtistList = async (list: string[]) => {
     return getDataForArtist(item);
   });
   const artistList = await Promise.all(promises);
-  return artistList;
+  return artistList.map((artist) => {
+    return { ...artist, selected: true };
+  });
 };
 
 const ImageUpload = (props) => {
-  const { setCurrentData, isLoading, setIsLoading } = props;
+  const { setArtistListObject, isLoading, setIsLoading } = props;
   const [isProcessing, setIsProcessing] = useState(false);
   const [ocrText, setOcrText] = useState('');
   const [pctg, setPctg] = useState('0.00');
@@ -111,7 +113,7 @@ const ImageUpload = (props) => {
     setOcrText(text);
     const artistStrings = parseArtistsFromOcrString(text);
     const artistObjectList = await getArtistList(artistStrings);
-    setCurrentData(artistObjectList);
+    setArtistListObject(artistObjectList);
     console.log(`>>>>>> what is artistObjectList: `, artistObjectList);
     setIsProcessing(false);
     setIsLoading(false);

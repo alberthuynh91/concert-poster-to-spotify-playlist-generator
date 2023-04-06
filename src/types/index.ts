@@ -20,4 +20,5 @@ export type ArtistType = {
   popularity: number;
   type: string; // artist
   uri: string; // spotify:artist:${id}
+  selected: boolean;
 };

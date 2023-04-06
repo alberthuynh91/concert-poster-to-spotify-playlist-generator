@@ -5,8 +5,18 @@
 
 .card {
   border: 1px solid gray;
+  display: flex;
+  flex-direction: row;
 }
 
 .card > img {
   margin-right: 0.5rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }

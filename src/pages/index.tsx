@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const { data: session } = useSession();
-  const [currentData, setCurrentData] = useState(undefined);
+  const [artistListObject, setArtistListObject] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   if (session) {
     console.log(`got session: `, session);
@@ -33,14 +33,15 @@ export default function Home() {
             <button onClick={() => signOut()}>Sign out</button>
           </div>
           <ImageUpload
-            setCurrentData={setCurrentData}
+            setArtistListObject={setArtistListObject}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
           />
           {isLoading && <LoadingSkeleton />}
-          {currentData !== undefined && (
+          {artistListObject !== undefined && (
             <SpotifyExample
-              currentData={currentData}
+              artistListObject={artistListObject}
+              setArtistListObject={setArtistListObject}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />

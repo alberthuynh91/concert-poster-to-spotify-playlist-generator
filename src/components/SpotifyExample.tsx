@@ -88,8 +88,8 @@ const addTracksToPlaylist = async (playlistId: string, uris: string[]) => {
 };
 
 const SpotifyExample = (props) => {
-  const { currentData, isLoading, setIsLoading } = props;
-  console.log(`what is currentData in spotifyexmaple: `, currentData);
+  const { artistListObject, setArtistListObject, isLoading, setIsLoading } =
+    props;
   const { data: session } = useSession();
   const [tracks, setTracks] = useState([]);
   const [trackUris, setTrackUris] = useState([]);
@@ -97,11 +97,11 @@ const SpotifyExample = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      // const topTracks = await getTopTracksForArtist(currentData[0].id);
-      const promises = currentData.map((artist: ArtistType) =>
+      const promises = artistListObject.map((artist: ArtistType) =>
         getTopTracksForArtist(artist.id)
       );
       const topTracks = await Promise.all(promises);
+      // TODO: Find work around to allow more than 100 songs to be added to a playlist
       const flattened = topTracks.flat().splice(0, 100);
       console.log(`got back top tracks: `, flattened);
       setTracks(flattened);
@@ -121,11 +121,47 @@ const SpotifyExample = (props) => {
     addTracksToPlaylist(playlistId, trackUris);
   };
 
-  if (currentData.length === 0) return null;
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: string
+  ) => {
+    setArtistListObject((prevList) => {
+      const newList = prevList.slice();
+      const index = newList.findIndex((item) => item.id === id);
+      newList[index].selected = !!event.target.checked;
+      return newList;
+    });
+  };
+
+  const handleSelectAll = () => {
+    setArtistListObject((prevList) => {
+      const newList = prevList.slice().map((item) => {
+        item.selected = true;
+        return item;
+      });
+      return newList;
+    });
+  };
+
+  const handleUnselectAll = () => {
+    setArtistListObject((prevList) => {
+      const newList = prevList.slice().map((item) => {
+        item.selected = false;
+        return item;
+      });
+      return newList;
+    });
+  };
+
+  if (artistListObject.length === 0) return null;
   return (
     <>
-      {isLoading && <div>hi</div>}
-      <Artists artists={currentData} />
+      <Artists
+        artists={artistListObject}
+        handleChange={handleChange}
+        handleSelectAll={handleSelectAll}
+        handleUnselectAll={handleUnselectAll}
+      />
       <button onClick={handleSave}>Create playlist</button>
       <button onClick={handleAdd}>Add songs to playlist</button>
     </>

@@ -12,10 +12,8 @@ Playlist
 
 ## Getting Started
 
-First, run the development server:
-
 ```
-yarn sintall
+yarn install
 yarn dev
 
 ```
