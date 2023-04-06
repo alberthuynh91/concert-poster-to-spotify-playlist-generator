@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Artists from './Artists';
 import { useSession } from 'next-auth/react';
 import { ArtistType } from '../types';
@@ -98,7 +98,7 @@ const addTracksToPlaylist = async (playlistId: string, uris: string[]) => {
   return data;
 };
 
-const Spotify = (props) => {
+const Spotify = (props: any) => {
   const { artistListObject, setArtistListObject, isLoading, setIsLoading } =
     props;
   const { data: session } = useSession();
@@ -110,20 +110,20 @@ const Spotify = (props) => {
   useEffect(() => {
     async function getTopTracksForSelectedArtists() {
       const filteredList = artistListObject.filter(
-        (artist) => artist.selected === true
+        (artist: any) => artist.selected === true
       );
       const promises = filteredList.map((artist: ArtistType) =>
         getTopTracksForArtist(artist.id)
       );
       const topTracks = await Promise.all(promises);
       // TODO: Find work around to allow more than 100 songs to be added to a playlist
-      const flattenedList = topTracks.flat().splice(0, 100);
+      const flattenedList: any = topTracks.flat().splice(0, 100);
       console.log(
         `Got back top tracks for all selected artists: `,
         flattenedList
       );
       setTracks(flattenedList);
-      const trackUris = flattenedList.map((track) => track.uri);
+      const trackUris = flattenedList.map((track: any) => track.uri);
       setTrackUris(trackUris);
     }
 
@@ -131,6 +131,7 @@ const Spotify = (props) => {
   }, [artistListObject]);
 
   const handleCreate = async () => {
+    // @ts-expect-error
     const userId = session?.token?.sub;
     const playlistId = await createPlaylistForUser(userId, setPlaylistId);
     // TODO: Find a way to add more than 100 tracks to a playlist
@@ -139,8 +140,8 @@ const Spotify = (props) => {
   };
 
   const handleSelectAll = () => {
-    setArtistListObject((prevList) => {
-      const newList = prevList.slice().map((item) => {
+    setArtistListObject((prevList: any) => {
+      const newList = prevList.slice().map((item: any) => {
         item.selected = true;
         return item;
       });
@@ -149,8 +150,8 @@ const Spotify = (props) => {
   };
 
   const handleUnselectAll = () => {
-    setArtistListObject((prevList) => {
-      const newList = prevList.slice().map((item) => {
+    setArtistListObject((prevList: any) => {
+      const newList = prevList.slice().map((item: any) => {
         item.selected = false;
         return item;
       });
@@ -182,15 +183,24 @@ const Spotify = (props) => {
           </a>
         </Alert>
       </Snackbar>
-      <Artists
-        artists={artistListObject}
-        handleSelectAll={handleSelectAll}
-        handleUnselectAll={handleUnselectAll}
-        setArtistListObject={setArtistListObject}
-      />
-      <Button className="create-btn" variant="contained" onClick={handleCreate}>
-        Create new playlist with selected artists
-      </Button>
+      {!isLoading && (
+        <>
+          <Artists
+            artists={artistListObject}
+            handleSelectAll={handleSelectAll}
+            handleUnselectAll={handleUnselectAll}
+            setArtistListObject={setArtistListObject}
+          />
+          <Button
+            className="create-btn"
+            variant="contained"
+            color="success"
+            onClick={handleCreate}
+          >
+            Create new playlist with selected artists
+          </Button>
+        </>
+      )}
     </>
   );
 };

@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 registerPlugin(FilePondPluginImagePreview);
 
 // Used for debugging ocr text
-const ParsedOcrText = (props) => {
+const ParsedOcrText = (props: any) => {
   const { isProcessing, pctg, ocrText } = props;
   return (
     <div className="card">
@@ -92,7 +92,7 @@ const getArtistList = async (list: string[]) => {
   return filteredList;
 };
 
-const ImageUpload = (props) => {
+const ImageUpload = (props: any) => {
   const { setArtistListObject, isLoading, setIsLoading } = props;
   const [isProcessing, setIsProcessing] = useState(false);
   const [ocrText, setOcrText] = useState('');
@@ -100,17 +100,23 @@ const ImageUpload = (props) => {
   const workerRef = useRef(null);
   const pondRef = useRef(null);
 
-  const doOCR = async (file) => {
+  const doOCR = async (file: any) => {
     setIsProcessing(true);
     setIsLoading(true);
+    // @ts-expect-error
     await workerRef.current.load();
+    // @ts-expect-error
     await workerRef.current.loadLanguage('eng');
+    // @ts-expect-error
     await workerRef.current.initialize('eng');
+    // @ts-expect-error
     await workerRef.current.setParameters({
       // tessedit_char_whitelist: '0123456789',
-      preserve_interword_spaces: '0',
+      preserve_interword_spaces: '1',
+      textord_tabfind_vertical_text: '1',
     });
     // sending the File Object into the Recognize function to parse the data
+    // @ts-expect-error
     const response = await workerRef.current.recognize(file.file);
     const {
       data: { text },
@@ -119,12 +125,11 @@ const ImageUpload = (props) => {
     const artistStrings = parseArtistsFromOcrString(text);
     const artistObjectList = await getArtistList(artistStrings);
     setArtistListObject(artistObjectList);
-    console.log(`>>>>>> what is artistObjectList: `, artistObjectList);
     setIsProcessing(false);
     setIsLoading(false);
   };
 
-  const updateProgressAndLog = (m) => {
+  const updateProgressAndLog = (m: any) => {
     // Maximum value out of which percentage needs to be calculated. In our case it's 0 for 0 % and 1 for Max 100%
     var MAX_PARCENTAGE = 1;
     // DECIMAL_COUNT specifies no of floating decimal points in our percentage
@@ -141,9 +146,11 @@ const ImageUpload = (props) => {
       logger: (m) => updateProgressAndLog(m),
     });
     worker.then((res) => {
+      // @ts-expect-error
       workerRef.current = res;
     });
     return () => {
+      // @ts-expect-error
       workerRef.current?.terminate();
       workerRef.current = null;
     };

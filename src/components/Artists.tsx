@@ -12,19 +12,19 @@ const Artist = (props: ArtistType) => {
   const {
     images,
     id,
-    href,
+    // href,
     name,
     selected,
-    handleChange,
+    // @ts-expect-error
     setArtistListObject,
   } = props;
   if (!props.images) return null;
   const src = images[2]?.url || '';
 
   const handleCardClick = (selected: boolean) => {
-    setArtistListObject((prevList) => {
+    setArtistListObject((prevList: any) => {
       const newList = prevList.slice();
-      const index = newList.findIndex((item) => item.id === id);
+      const index = newList.findIndex((item: any) => item.id === id);
       newList[index].selected = !selected;
       return newList;
     });
@@ -42,6 +42,7 @@ const Artist = (props: ArtistType) => {
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite />}
             checked={selected}
+            color="success"
           />
         </span>
       </span>
@@ -49,7 +50,7 @@ const Artist = (props: ArtistType) => {
   );
 };
 
-const Artists = (props) => {
+const Artists = (props: any) => {
   const {
     artists,
     handleChange,
@@ -61,10 +62,10 @@ const Artists = (props) => {
     <>
       <div className={styles.container}>
         <h1>Artists</h1>{' '}
-        <Button variant="text" onClick={handleSelectAll}>
+        <Button variant="text" onClick={handleSelectAll} color="success">
           Select All
         </Button>
-        <Button variant="text" onClick={handleUnselectAll}>
+        <Button variant="text" onClick={handleUnselectAll} color="success">
           Unselect All
         </Button>
       </div>
@@ -74,7 +75,7 @@ const Artists = (props) => {
             <Artist
               key={artist.id}
               {...artist}
-              handleChange={handleChange}
+              // @ts-expect-error
               setArtistListObject={setArtistListObject}
             />
           );

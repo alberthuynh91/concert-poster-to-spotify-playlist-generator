@@ -4,6 +4,12 @@ Creates a spotify playlist using the artists listed on a concert poster
 
 ## Backlog
 
+Clean up
+
+- Fix all `// @ts-expect-error`
+- Add types for places where `any` is used. Do a global find on `: any`
+- Audit depenencies / imports
+
 Playlist
 
 - Use uploaded image as album cover for created Spotify playlist

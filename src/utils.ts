@@ -5,7 +5,7 @@ function onlyLettersAndNumbers(str: string) {
 // TODO: Improve this function as it only returns back some of the artists
 export const parseArtistsFromOcrString = (ocrString: string): string[] => {
   const splitString = ocrString.split(' - ')
-  const filteredList = []
+  const filteredList: any = []
   splitString.forEach((item) => {
     const lowered = item.toLowerCase().replace(/\s/g, '')
     // contains only letters and numbers
