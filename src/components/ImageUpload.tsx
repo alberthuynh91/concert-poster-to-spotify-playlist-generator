@@ -3,11 +3,41 @@ import { createWorker } from 'tesseract.js';
 import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { parseArtistsFromOcrString } from '../utils';
+import styles from '@/styles/ImageUpload.module.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 import 'filepond/dist/filepond.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 registerPlugin(FilePondPluginImagePreview);
+
+const ParsedOcrText = (props) => {
+  const { isProcessing, pctg, ocrText } = props;
+  return (
+    <div className="card">
+      <h5 className="card-header">
+        <div style={{ margin: '1%', textAlign: 'left' }} className="row">
+          <div className="col-md-12">
+            <i
+              className={'fas fa-sync fa-2x ' + (isProcessing ? 'fa-spin' : '')}
+            ></i>{' '}
+            <span className="status-text">
+              {isProcessing ? `Processing Image ( ${pctg} % )` : 'Parsed Text'}{' '}
+            </span>
+          </div>
+        </div>
+      </h5>
+      <div className="card-body">
+        <p className="card-text">
+          {isProcessing
+            ? '...........'
+            : ocrText.length === 0
+            ? 'No Valid Text Found / Upload Image to Parse Text From Image'
+            : ocrText}
+        </p>
+      </div>
+    </div>
+  );
+};
 
 const getAccessToken = async () => {
   const SPOTIFY_CLIENT_ID = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
@@ -56,7 +86,7 @@ const getArtistList = async (list: string[]) => {
 };
 
 const ImageUpload = (props) => {
-  const { setCurrentData } = props;
+  const { setCurrentData, isLoading, setIsLoading } = props;
   const [isProcessing, setIsProcessing] = useState(false);
   const [ocrText, setOcrText] = useState('');
   const [pctg, setPctg] = useState('0.00');
@@ -78,12 +108,12 @@ const ImageUpload = (props) => {
       data: { text },
     } = response;
     console.log(`finished processing: `, response);
-    setIsProcessing(false);
     setOcrText(text);
     const artistStrings = parseArtistsFromOcrString(text);
     const artistObjectList = await getArtistList(artistStrings);
     setCurrentData(artistObjectList);
     console.log(`>>>>>> what is artistObjectList: `, artistObjectList);
+    setIsProcessing(false);
   };
 
   const updateProgressAndLog = (m) => {
@@ -112,53 +142,23 @@ const ImageUpload = (props) => {
   }, []);
 
   return (
-    <div className="App">
-      <div className="container">
-        <div style={{ marginTop: '10%' }} className="row">
-          <div className="col-md-4"></div>
-          <div className="col-md-4">
-            <FilePond
-              ref={pondRef}
-              onaddfile={(err, file) => {
-                doOCR(file);
-              }}
-              onremovefile={(err, fiile) => {
-                setOcrText('');
-              }}
-            />
-          </div>
-          <div className="col-md-4"></div>
-        </div>
-        <div className="card">
-          <h5 className="card-header">
-            <div style={{ margin: '1%', textAlign: 'left' }} className="row">
-              <div className="col-md-12">
-                <i
-                  className={
-                    'fas fa-sync fa-2x ' + (isProcessing ? 'fa-spin' : '')
-                  }
-                ></i>{' '}
-                <span className="status-text">
-                  {isProcessing
-                    ? `Processing Image ( ${pctg} % )`
-                    : 'Parsed Text'}{' '}
-                </span>
-              </div>
-            </div>
-          </h5>
-          <div className="card-body">
-            <p className="card-text">
-              {isProcessing
-                ? '...........'
-                : ocrText.length === 0
-                ? 'No Valid Text Found / Upload Image to Parse Text From Image'
-                : ocrText}
-            </p>
-          </div>
-        </div>
-
-        <div className="ocr-text"></div>
+    <div className={styles.container}>
+      <div className="filepond-wrapper">
+        <FilePond
+          ref={pondRef}
+          onaddfile={(err, file) => {
+            doOCR(file);
+          }}
+          onremovefile={(err, fiile) => {
+            setOcrText('');
+          }}
+        />
       </div>
+      {/* <ParsedOcrText
+        isProcessing={isProcessing}
+        pctg={pctg}
+        ocrText={ocrText}
+      /> */}
     </div>
   );
 };
