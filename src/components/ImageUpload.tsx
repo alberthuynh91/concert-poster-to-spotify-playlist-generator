@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 registerPlugin(FilePondPluginImagePreview);
 
+// Used for debugging ocr text
 const ParsedOcrText = (props) => {
   const { isProcessing, pctg, ocrText } = props;
   return (
@@ -82,9 +83,13 @@ const getArtistList = async (list: string[]) => {
     return getDataForArtist(item);
   });
   const artistList = await Promise.all(promises);
-  return artistList.map((artist) => {
-    return { ...artist, selected: true };
-  });
+  // Filter out any artists with low popularity as it could be a bad query
+  const filteredList = artistList
+    .filter((artist) => artist.popularity >= 10 && artist.images.length > 0)
+    .map((artist) => {
+      return { ...artist, selected: true };
+    });
+  return filteredList;
 };
 
 const ImageUpload = (props) => {

@@ -2,6 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import Artists from './Artists';
 import { useSession } from 'next-auth/react';
 import { ArtistType } from '../types';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const getAccessToken = async () => {
   const SPOTIFY_CLIENT_ID = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
@@ -38,7 +48,8 @@ const getTopTracksForArtist = async (artistId: string) => {
     }
   );
   const { tracks } = await response.json();
-  return tracks.splice(0, 2);
+  // TODO: Allow users to pick how many songs they want per artist
+  return tracks.splice(0, 5);
 };
 
 const createPlaylistForUser = async (
@@ -65,7 +76,7 @@ const createPlaylistForUser = async (
     setPlaylistId(data.id);
   }
   console.log(`Playlist successfully created: `, data);
-  return data;
+  return data.id;
 };
 
 const addTracksToPlaylist = async (playlistId: string, uris: string[]) => {
@@ -83,54 +94,48 @@ const addTracksToPlaylist = async (playlistId: string, uris: string[]) => {
     body: JSON.stringify(payload),
   });
   const data = await response.json();
-  console.log(`successfully added tracks to playlist ${playlistId}: `, data);
+  console.log(`Successfully added tracks to playlist ${playlistId}: `, data);
   return data;
 };
 
-const SpotifyExample = (props) => {
+const Spotify = (props) => {
   const { artistListObject, setArtistListObject, isLoading, setIsLoading } =
     props;
   const { data: session } = useSession();
   const [tracks, setTracks] = useState([]);
   const [trackUris, setTrackUris] = useState([]);
   const [playlistId, setPlaylistId] = useState('');
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    async function fetchData() {
-      const promises = artistListObject.map((artist: ArtistType) =>
+    async function getTopTracksForSelectedArtists() {
+      const filteredList = artistListObject.filter(
+        (artist) => artist.selected === true
+      );
+      const promises = filteredList.map((artist: ArtistType) =>
         getTopTracksForArtist(artist.id)
       );
       const topTracks = await Promise.all(promises);
       // TODO: Find work around to allow more than 100 songs to be added to a playlist
-      const flattened = topTracks.flat().splice(0, 100);
-      console.log(`got back top tracks: `, flattened);
-      setTracks(flattened);
-      const trackUris = flattened.map((track) => track.uri);
+      const flattenedList = topTracks.flat().splice(0, 100);
+      console.log(
+        `Got back top tracks for all selected artists: `,
+        flattenedList
+      );
+      setTracks(flattenedList);
+      const trackUris = flattenedList.map((track) => track.uri);
       setTrackUris(trackUris);
     }
 
-    fetchData();
-  }, []);
+    getTopTracksForSelectedArtists();
+  }, [artistListObject]);
 
-  const handleSave = async () => {
+  const handleCreate = async () => {
     const userId = session?.token?.sub;
-    createPlaylistForUser(userId, setPlaylistId);
-  };
-
-  const handleAdd = () => {
-    addTracksToPlaylist(playlistId, trackUris);
-  };
-
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => {
-    setArtistListObject((prevList) => {
-      const newList = prevList.slice();
-      const index = newList.findIndex((item) => item.id === id);
-      newList[index].selected = !!event.target.checked;
-      return newList;
-    });
+    const playlistId = await createPlaylistForUser(userId, setPlaylistId);
+    // TODO: Find a way to add more than 100 tracks to a playlist
+    await addTracksToPlaylist(playlistId, trackUris);
+    setOpen(true);
   };
 
   const handleSelectAll = () => {
@@ -153,19 +158,41 @@ const SpotifyExample = (props) => {
     });
   };
 
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   if (artistListObject.length === 0) return null;
   return (
     <>
+      <Snackbar open={open} autoHideDuration={10000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Successfully create new playlist! Open your Spotify app or view it{' '}
+          <a
+            target="_blank"
+            href="https://open.spotify.com/playlist/1DEpVnMMxPHL60LwxCeaHg"
+          >
+            here
+          </a>
+        </Alert>
+      </Snackbar>
       <Artists
         artists={artistListObject}
-        handleChange={handleChange}
         handleSelectAll={handleSelectAll}
         handleUnselectAll={handleUnselectAll}
+        setArtistListObject={setArtistListObject}
       />
-      <button onClick={handleSave}>Create playlist</button>
-      <button onClick={handleAdd}>Add songs to playlist</button>
+      <Button className="create-btn" variant="contained" onClick={handleCreate}>
+        Create new playlist with selected artists
+      </Button>
     </>
   );
 };
 
-export default SpotifyExample;
+export default Spotify;

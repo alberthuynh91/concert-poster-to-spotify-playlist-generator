@@ -1,9 +1,9 @@
-function onlyLettersAndNumbers(str) {
+function onlyLettersAndNumbers(str: string) {
 	return /^[A-Za-z0-9]*$/.test(str);
 }
 
 // TODO: Improve this function as it only returns back some of the artists
-export const parseArtistsFromOcrString = (ocrString) => {
+export const parseArtistsFromOcrString = (ocrString: string): string[] => {
   const splitString = ocrString.split(' - ')
   const filteredList = []
   splitString.forEach((item) => {
