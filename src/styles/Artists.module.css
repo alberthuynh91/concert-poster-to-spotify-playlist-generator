@@ -1,0 +1,12 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.card {
+  border: 1px solid gray;
+}
+
+.card > img {
+  margin-right: 0.5rem;
+}
