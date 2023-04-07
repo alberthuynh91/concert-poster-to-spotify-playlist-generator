@@ -1,9 +1,14 @@
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 
+const callbackUrl =
+  process.env.NEXT_PUBLIC_ENV === 'dev'
+    ? 'http://localhost:3000'
+    : 'https://concert-poster-to-spotify-playlist.netlify.app/';
+
 export default function Login() {
   const handleLogin = () => {
-    signIn('spotify', { callbackUrl: 'http://localhost:3000' });
+    signIn('spotify', { callbackUrl });
   };
 
   return (
