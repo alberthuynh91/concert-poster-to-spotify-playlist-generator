@@ -50,6 +50,7 @@ const getAccessToken = async () => {
   const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token?`;
   const TOKEN_URL =
     TOKEN_ENDPOINT +
+    // @ts-expect-error
     new URLSearchParams({
       grant_type: 'refresh_token',
       refresh_token: SPOTIFY_REFRESH_TOKEN,
