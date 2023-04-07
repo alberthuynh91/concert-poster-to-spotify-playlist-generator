@@ -4,7 +4,7 @@ import Image from 'next/image';
 const callbackUrl =
   process.env.NEXT_PUBLIC_ENV === 'dev'
     ? 'http://localhost:3000'
-    : 'https://concert-poster-to-spotify-playlist.netlify.app/';
+    : 'https://concert-poster-to-spotify-playlist.netlify.app';
 
 export default function Login() {
   const handleLogin = () => {
