@@ -16,6 +16,9 @@ Playlist
 - Allow user to customize name / description of playlist
 - Allow user to add more than 100 tracks to a playlist at a time
 
+Deploy
+- Fix Netlify deployment
+
 ## Getting Started
 
 ```
