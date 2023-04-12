@@ -4,6 +4,11 @@ Creates a spotify playlist using the artists listed on a concert poster
 
 ## Backlog
 
+OCR
+
+- Improve image processing to get artist names more accurately
+- Improve filtering method to get artist names more accurately from OCR text
+
 Clean up
 
 - Fix all `// @ts-expect-error`
