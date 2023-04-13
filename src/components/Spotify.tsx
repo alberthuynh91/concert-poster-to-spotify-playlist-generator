@@ -24,7 +24,6 @@ const Spotify = (props: any) => {
   const { data: session } = useSession();
   const [tracks, setTracks] = useState([]);
   const [trackUris, setTrackUris] = useState([]);
-  const [playlistId, setPlaylistId] = useState('');
   const [open, setOpen] = React.useState(false);
   const isCreateDisabled = trackUris.length === 0;
 
@@ -34,6 +33,7 @@ const Spotify = (props: any) => {
     const playlistId = await createPlaylistForUser(userId);
     // TODO: Find a way to add more than 100 tracks to a playlist
     await addTracksToPlaylist(playlistId, trackUris);
+    handleUnselectAll();
     setOpen(true);
   };
 
@@ -92,12 +92,12 @@ const Spotify = (props: any) => {
     <>
       <Snackbar open={open} autoHideDuration={10000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Successfully create new playlist! Open your Spotify app or view it{' '}
+          Successfully created new playlist!{' '}
           <a
             target="_blank"
             href="https://open.spotify.com/playlist/1DEpVnMMxPHL60LwxCeaHg"
           >
-            here
+            View your playlist
           </a>
         </Alert>
       </Snackbar>
