@@ -7,7 +7,7 @@ import LinearProgress, {
   LinearProgressProps,
 } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { parseArtistsFromOcrString } from '../utils';
+import { parseArtistsFromOcrString, getArtistList } from '@/utils';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 import 'filepond/dist/filepond.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -29,59 +29,6 @@ const LinearProgressWithLabel = (
       </Box>
     </Box>
   );
-};
-
-const getAccessToken = async () => {
-  const SPOTIFY_CLIENT_ID = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-  const SPOTIFY_CLIENT_SECRET = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
-  const SPOTIFY_REFRESH_TOKEN = process.env.NEXT_PUBLIC_SPOTIFY_REFRESH_TOKEN;
-  const BASIC = Buffer.from(
-    `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
-  ).toString('base64');
-  const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token?`;
-  const TOKEN_URL =
-    TOKEN_ENDPOINT +
-    // @ts-expect-error
-    new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: SPOTIFY_REFRESH_TOKEN,
-    });
-  const response = await fetch(TOKEN_URL, {
-    headers: {
-      Authorization: `Basic ${BASIC}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    method: 'POST',
-  });
-  return response.json();
-};
-
-const getDataForArtist = async (artist: string) => {
-  const { access_token } = await getAccessToken();
-  const response = await fetch(
-    `https://api.spotify.com/v1/search?q=${artist}&type=artist&market=US&limit=1&offset=0`,
-    {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    }
-  );
-  const data = await response.json();
-  return data?.artists?.items[0] || {};
-};
-
-const getArtistList = async (list: string[]) => {
-  const promises = list.map((item) => {
-    return getDataForArtist(item);
-  });
-  const artistList = await Promise.all(promises);
-  // Filter out any artists with low popularity as it could be a bad query
-  const filteredList = artistList
-    .filter((artist) => artist.popularity >= 10 && artist.images.length > 0)
-    .map((artist) => {
-      return { ...artist, selected: true };
-    });
-  return filteredList;
 };
 
 const ImageUpload = (props: any) => {

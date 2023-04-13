@@ -34,8 +34,8 @@ const LoggedOut = () => {
     >
       <h1>Concert Poster to Spotify Playlist Generator</h1>
       <p>
-        Want to create a Spotify playlist from a concert poster? It can be
-        easily done as easy as uploading an image of the concert poster!
+        Want to create Spotify playlists from concert posters? It can be done
+        simply by uploading an image of the concert poster!
       </p>
       <Button
         component={Link}
