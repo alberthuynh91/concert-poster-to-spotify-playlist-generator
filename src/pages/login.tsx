@@ -18,7 +18,6 @@ export default function Login() {
         alt="spotify logo"
         width={320}
         height={96}
-        objectFit="contain"
       />
       <button
         className="flex px-12 py-2 text-lg tracking-widest uppercase rounded-full focus:outline-none bg-primary hover:bg-opacity-80"

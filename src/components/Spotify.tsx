@@ -40,6 +40,7 @@ const getAccessToken = async () => {
 
 const getTopTracksForArtist = async (artistId: string) => {
   const { access_token } = await getAccessToken();
+  // TODO: Remove hardcoded limit
   const response = await fetch(
     `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=US&limit=3`,
     {
@@ -48,7 +49,8 @@ const getTopTracksForArtist = async (artistId: string) => {
       },
     }
   );
-  const { tracks } = await response.json();
+  // TODO: Add error handling
+  const { tracks = [] } = await response.json();
   // TODO: Allow users to pick how many songs they want per artist
   return tracks.splice(0, 5);
 };

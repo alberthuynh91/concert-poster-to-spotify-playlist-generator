@@ -15,6 +15,7 @@ export default NextAuth({
       refreshToken: process.env.NEXT_PUBLIC_SPOTIFY_REFRESH_TOKEN,
     }),
   ],
+  secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
