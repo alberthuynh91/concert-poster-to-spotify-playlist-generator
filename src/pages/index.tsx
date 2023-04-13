@@ -17,6 +17,7 @@ const callbackUrl =
 const LoggedOut = () => {
   return (
     <Box
+      p={1}
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -34,8 +35,8 @@ const LoggedOut = () => {
     >
       <h1>Concert Poster to Spotify Playlist Generator</h1>
       <p>
-        Want to create Spotify playlists from concert posters? It can be done
-        simply by uploading an image of the concert poster!
+        Want to create Spotify playlists from concert posters? Just upload an
+        image of the concert poster and we handle the rest!
       </p>
       <Button
         component={Link}
