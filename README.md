@@ -4,6 +4,11 @@ Creates a spotify playlist using the artists listed on a concert poster
 
 ## Backlog
 
+OCR
+
+- Improve image processing to get artist names more accurately
+- Improve filtering method to get artist names more accurately from OCR text
+
 Clean up
 
 - Fix all `// @ts-expect-error`
@@ -15,6 +20,10 @@ Playlist
 - Use uploaded image as album cover for created Spotify playlist
 - Allow user to customize name / description of playlist
 - Allow user to add more than 100 tracks to a playlist at a time
+- Add error handling
+
+Deploy
+- Fix Netlify deployment
 
 ## Getting Started
 
