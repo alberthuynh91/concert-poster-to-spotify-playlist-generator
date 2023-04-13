@@ -2,6 +2,12 @@
   padding: 2rem 14rem;
 }
 
+.userStatus {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;

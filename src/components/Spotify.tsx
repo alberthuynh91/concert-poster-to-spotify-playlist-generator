@@ -28,6 +28,7 @@ const getAccessToken = async () => {
       grant_type: 'refresh_token',
       refresh_token: SPOTIFY_REFRESH_TOKEN,
     });
+  // TODO: Add error handling
   const response = await fetch(TOKEN_URL, {
     headers: {
       Authorization: `Basic ${BASIC}`,
@@ -41,6 +42,7 @@ const getAccessToken = async () => {
 const getTopTracksForArtist = async (artistId: string) => {
   const { access_token } = await getAccessToken();
   // TODO: Remove hardcoded limit
+  // TODO: Add error handling
   const response = await fetch(
     `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=US&limit=3`,
     {
@@ -49,16 +51,12 @@ const getTopTracksForArtist = async (artistId: string) => {
       },
     }
   );
-  // TODO: Add error handling
   const { tracks = [] } = await response.json();
   // TODO: Allow users to pick how many songs they want per artist
   return tracks.splice(0, 5);
 };
 
-const createPlaylistForUser = async (
-  userId: string,
-  setPlaylistId: Function
-) => {
+const createPlaylistForUser = async (userId: string) => {
   const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
   const payload = {
     name: 'Concert Poster to Playlist',
@@ -66,7 +64,7 @@ const createPlaylistForUser = async (
     public: true,
   };
   const { access_token } = await getAccessToken();
-
+  // TODO: Add error handling
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -75,9 +73,6 @@ const createPlaylistForUser = async (
     body: JSON.stringify(payload),
   });
   const data = await response.json();
-  if (data.id) {
-    setPlaylistId(data.id);
-  }
   console.log(`Playlist successfully created: `, data);
   return data.id;
 };
@@ -88,7 +83,7 @@ const addTracksToPlaylist = async (playlistId: string, uris: string[]) => {
     uris,
   };
   const { access_token } = await getAccessToken();
-
+  // TODO: Add error handling
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -109,6 +104,43 @@ const Spotify = (props: any) => {
   const [trackUris, setTrackUris] = useState([]);
   const [playlistId, setPlaylistId] = useState('');
   const [open, setOpen] = React.useState(false);
+  const isCreateDisabled = trackUris.length === 0;
+
+  const handleCreate = async () => {
+    // @ts-expect-error
+    const userId = session?.token?.sub;
+    const playlistId = await createPlaylistForUser(userId);
+    // TODO: Find a way to add more than 100 tracks to a playlist
+    await addTracksToPlaylist(playlistId, trackUris);
+    setOpen(true);
+  };
+
+  const handleSelectAll = () => {
+    setArtistListObject((prevList: any) => {
+      const updated = prevList.slice().map((item: any) => {
+        item.selected = true;
+        return item;
+      });
+      return updated;
+    });
+  };
+
+  const handleUnselectAll = () => {
+    setArtistListObject((prevList: any) => {
+      const updated = prevList.slice().map((item: any) => {
+        item.selected = false;
+        return item;
+      });
+      return updated;
+    });
+  };
+
+  const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   useEffect(() => {
     async function getTopTracksForSelectedArtists() {
@@ -129,50 +161,11 @@ const Spotify = (props: any) => {
       const trackUris = flattenedList.map((track: any) => track.uri);
       setTrackUris(trackUris);
     }
-
     getTopTracksForSelectedArtists();
   }, [artistListObject]);
 
-  const handleCreate = async () => {
-    // @ts-expect-error
-    const userId = session?.token?.sub;
-    const playlistId = await createPlaylistForUser(userId, setPlaylistId);
-    // TODO: Find a way to add more than 100 tracks to a playlist
-    await addTracksToPlaylist(playlistId, trackUris);
-    setOpen(true);
-  };
-
-  const handleSelectAll = () => {
-    setArtistListObject((prevList: any) => {
-      const newList = prevList.slice().map((item: any) => {
-        item.selected = true;
-        return item;
-      });
-      return newList;
-    });
-  };
-
-  const handleUnselectAll = () => {
-    setArtistListObject((prevList: any) => {
-      const newList = prevList.slice().map((item: any) => {
-        item.selected = false;
-        return item;
-      });
-      return newList;
-    });
-  };
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
   if (artistListObject.length === 0) return null;
+
   return (
     <>
       <Snackbar open={open} autoHideDuration={10000} onClose={handleClose}>
@@ -199,6 +192,7 @@ const Spotify = (props: any) => {
             variant="contained"
             color="success"
             onClick={handleCreate}
+            disabled={isCreateDisabled}
           >
             Create new playlist with selected artists
           </Button>
