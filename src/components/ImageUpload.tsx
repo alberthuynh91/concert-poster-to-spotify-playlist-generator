@@ -14,9 +14,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 registerPlugin(FilePondPluginImagePreview);
 
-function LinearProgressWithLabel(
+const LinearProgressWithLabel = (
   props: LinearProgressProps & { value: number }
-) {
+) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ width: '100%', mr: 1 }}>
@@ -28,36 +28,6 @@ function LinearProgressWithLabel(
         )}%`}</Typography>
       </Box>
     </Box>
-  );
-}
-
-// Used for debugging ocr text
-const ParsedOcrText = (props: any) => {
-  const { isProcessing, pctg, ocrText } = props;
-  return (
-    <div className="card">
-      <h5 className="card-header">
-        <div style={{ margin: '1%', textAlign: 'left' }} className="row">
-          <div className="col-md-12">
-            <i
-              className={'fas fa-sync fa-2x ' + (isProcessing ? 'fa-spin' : '')}
-            ></i>{' '}
-            <span className="status-text">
-              {isProcessing ? `Processing Image ( ${pctg} % )` : 'Parsed Text'}{' '}
-            </span>
-          </div>
-        </div>
-      </h5>
-      <div className="card-body">
-        <p className="card-text">
-          {isProcessing
-            ? '...........'
-            : ocrText.length === 0
-            ? 'No Valid Text Found / Upload Image to Parse Text From Image'
-            : ocrText}
-        </p>
-      </div>
-    </div>
   );
 };
 
@@ -118,7 +88,7 @@ const ImageUpload = (props: any) => {
   const { setArtistListObject, isLoading, setIsLoading } = props;
   const [isProcessing, setIsProcessing] = useState(false);
   const [ocrText, setOcrText] = useState('');
-  const [pctg, setPctg] = useState('0.00');
+  const [percentage, setPercentage] = useState('0.00');
   const workerRef = useRef(null);
   const pondRef = useRef(null);
 
@@ -158,8 +128,8 @@ const ImageUpload = (props: any) => {
     var DECIMAL_COUNT = 2;
 
     if (m.status === 'recognizing text') {
-      var pctg = (m.progress / MAX_PARCENTAGE) * 100;
-      setPctg(pctg.toFixed(DECIMAL_COUNT));
+      var percentage = (m.progress / MAX_PARCENTAGE) * 100;
+      setPercentage(percentage.toFixed(DECIMAL_COUNT));
     }
   };
 
@@ -196,13 +166,13 @@ const ImageUpload = (props: any) => {
           <LinearProgressWithLabel
             variant="determinate"
             color="success"
-            value={Number(pctg)}
+            value={Number(percentage)}
           />
         </Box>
       )}
       {/* <ParsedOcrText
         isProcessing={isProcessing}
-        pctg={pctg}
+        percentage={percentage}
         ocrText={ocrText}
       /> */}
     </>

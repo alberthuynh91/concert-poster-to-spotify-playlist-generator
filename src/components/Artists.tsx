@@ -19,7 +19,9 @@ const Artist = (props: ArtistType) => {
     // @ts-expect-error
     setArtistListObject,
   } = props;
+
   if (!props.images) return null;
+
   const src = images[2]?.url || '';
 
   const handleCardClick = (selected: boolean) => {

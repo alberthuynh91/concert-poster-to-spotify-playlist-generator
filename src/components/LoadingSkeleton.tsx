@@ -1,26 +1,19 @@
 import Skeleton from '@mui/material/Skeleton';
-import styles from '@/styles/LoadingSkeleton.module.css';
+import Grid from '@mui/material/Grid';
 
 const LoadingSkeleton = () => {
   return (
-    <div className={styles.skeleton}>
-      <div className={styles.skeletonWrapper}>
-        <Skeleton height={70} />
-        <Skeleton height={70} />
-      </div>
-      <div className={styles.skeletonWrapper}>
-        <Skeleton height={70} />
-        <Skeleton height={70} />
-      </div>
-      <div className={styles.skeletonWrapper}>
-        <Skeleton height={70} />
-        <Skeleton height={70} />
-      </div>
-      <div className={styles.skeletonWrapper}>
-        <Skeleton height={70} />
-        <Skeleton height={70} />
-      </div>
-    </div>
+    <Grid
+      sx={{ padding: '0 0.5rem', marginTop: '2.5rem' }}
+      container
+      columns={{ xs: 1, sm: 12, md: 12 }}
+    >
+      {Array.from(Array(6)).map((_, index) => (
+        <Grid sx={{ padding: '0 0.2rem' }} item xs={1} sm={6} md={6} key={0}>
+          <Skeleton height={70} />
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 export default LoadingSkeleton;
