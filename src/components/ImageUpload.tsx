@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createWorker } from 'tesseract.js';
 import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import Box from '@mui/material/Box';
+import LinearProgress, {
+  LinearProgressProps,
+} from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
 import { parseArtistsFromOcrString } from '../utils';
 import styles from '@/styles/ImageUpload.module.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
@@ -9,6 +14,23 @@ import 'filepond/dist/filepond.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 registerPlugin(FilePondPluginImagePreview);
+
+function LinearProgressWithLabel(
+  props: LinearProgressProps & { value: number }
+) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 // Used for debugging ocr text
 const ParsedOcrText = (props: any) => {
@@ -170,6 +192,15 @@ const ImageUpload = (props: any) => {
           }}
         />
       </div>
+      {isProcessing && (
+        <Box pl={2} mt={4} sx={{ width: '100%' }}>
+          <LinearProgressWithLabel
+            variant="determinate"
+            color="success"
+            value={Number(pctg)}
+          />
+        </Box>
+      )}
       {/* <ParsedOcrText
         isProcessing={isProcessing}
         pctg={pctg}

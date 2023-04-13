@@ -7,6 +7,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
 
 const callbackUrl =
   process.env.NEXT_PUBLIC_ENV === 'dev'
@@ -42,11 +43,11 @@ const LoggedIn = (props: any) => {
     setIsLoading,
   } = props;
   return (
-    <div>
-      <div className={styles.userStatus}>
+    <>
+      <Box sx={{ fontWeight: 'light', fontSize: 14, textAlign: 'right' }}>
         Signed in as {session?.token?.email}{' '}
         <Button onClick={() => signOut()}>Sign out</Button>
-      </div>
+      </Box>
       <ImageUpload
         setArtistListObject={setArtistListObject}
         isLoading={isLoading}
@@ -61,14 +62,15 @@ const LoggedIn = (props: any) => {
           setIsLoading={setIsLoading}
         />
       )}
-    </div>
+    </>
   );
 };
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [artistListObject, setArtistListObject] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
+  if (status === 'loading') return null;
   return (
     <>
       <Head>
@@ -81,7 +83,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {session ? (
+        {status === 'authenticated' ? (
           <LoggedIn
             session={session}
             artistListObject={artistListObject}
