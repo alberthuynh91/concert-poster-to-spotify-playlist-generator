@@ -1,12 +1,11 @@
-import Image from 'next/image';
 import { ArtistType } from '../types';
-import styles from '@/styles/Artists.module.css';
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Avatar from '@mui/material/Avatar';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -33,9 +32,23 @@ const Artist = (props: ArtistType) => {
   };
 
   return (
-    <button className={styles.card} onClick={() => handleCardClick(selected)}>
-      <Image src={src} alt="artist image" width={50} height={50} />
-      <span className={styles.info}>
+    <Button
+      sx={{ color: 'text.primary', width: '100%' }}
+      onClick={() => handleCardClick(selected)}
+    >
+      <Box p={1}>
+        <Avatar alt={name} src={src} />
+      </Box>
+      <Box
+        p={1}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
         <span>{name}</span>
         <span>
           <Checkbox
@@ -47,30 +60,27 @@ const Artist = (props: ArtistType) => {
             color="success"
           />
         </span>
-      </span>
-    </button>
+      </Box>
+    </Button>
   );
 };
 
 const Artists = (props: any) => {
-  const {
-    artists,
-    handleChange,
-    handleSelectAll,
-    handleUnselectAll,
-    setArtistListObject,
-  } = props;
+  const { artists, handleSelectAll, handleUnselectAll, setArtistListObject } =
+    props;
   return (
     <>
-      <div className={styles.container}>
-        <h1>Artists</h1>{' '}
-        <Button variant="text" onClick={handleSelectAll} color="success">
-          Select All
-        </Button>
-        <Button variant="text" onClick={handleUnselectAll} color="success">
-          Unselect All
-        </Button>
-      </div>
+      <Box>
+        <h1>Artists</h1>
+        <Box sx={{ textAlign: 'right' }}>
+          <Button variant="text" onClick={handleSelectAll} color="success">
+            Select All
+          </Button>
+          <Button variant="text" onClick={handleUnselectAll} color="success">
+            Unselect All
+          </Button>
+        </Box>
+      </Box>
       <Box mb={4} sx={{ flexGrow: 1 }}>
         <Grid container columns={{ xs: 1, sm: 12, md: 12 }}>
           {artists.map((artist: ArtistType, index: number) => {

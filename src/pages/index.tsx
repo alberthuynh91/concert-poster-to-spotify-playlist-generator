@@ -16,11 +16,26 @@ const callbackUrl =
 
 const LoggedOut = () => {
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        minHeight: '100vh',
+        flexDirection: 'column',
+        backgroundImage: `linear-gradient(
+          to bottom,
+          rgba(85, 255, 0, 0.5),
+          rgba(0, 0, 255, 0.5)
+        ), url("/images/spotify-bg-2.png")`,
+        color: 'white',
+      }}
+    >
       <h1>Concert Poster to Spotify Playlist Generator</h1>
       <p>
-        Ever wanted to create a Spotify playlist from a concert poster? Well now
-        you can! Just simply upload an image of the concert poster!
+        Want to create a Spotify playlist from a concert poster? It can be
+        easily done as easy as uploading an image of the concert poster!
       </p>
       <Button
         component={Link}
@@ -30,7 +45,7 @@ const LoggedOut = () => {
       >
         Start making playlists
       </Button>
-    </>
+    </Box>
   );
 };
 
@@ -43,7 +58,7 @@ const LoggedIn = (props: any) => {
     setIsLoading,
   } = props;
   return (
-    <Box px={{ xs: 0, sm: 2, md: 8, lg: 20, xl: 40 }}>
+    <Box py={1} px={{ xs: 2, sm: 2, md: 8, lg: 20, xl: 40 }}>
       <Box sx={{ fontWeight: 'light', fontSize: 14, textAlign: 'right' }}>
         Signed in as {session?.token?.email}{' '}
         <Button onClick={() => signOut()}>Sign out</Button>
@@ -74,7 +89,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Concert Poster to Spotify Playlist</title>
+        <title>Concert Poster to Spotify Playlist Generator</title>
         <meta
           name="description"
           content="create spotify playlists from concert poster images"

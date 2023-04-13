@@ -15,6 +15,11 @@ Clean up
 - Add types for places where `any` is used. Do a global find on `: any`
 - Audit depenencies / imports
 
+Artists
+
+- On hover of artist card, play music snippet from artist
+- Open modal with more info on artist on hover or on click of artist icon/name
+
 Playlist
 
 - Use uploaded image as album cover for created Spotify playlist
