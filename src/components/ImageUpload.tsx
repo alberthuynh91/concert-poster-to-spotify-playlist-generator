@@ -8,7 +8,6 @@ import LinearProgress, {
 } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import { parseArtistsFromOcrString } from '../utils';
-import styles from '@/styles/ImageUpload.module.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 import 'filepond/dist/filepond.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -180,7 +179,7 @@ const ImageUpload = (props: any) => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <>
       <div className="filepond-wrapper">
         <FilePond
           ref={pondRef}
@@ -206,7 +205,7 @@ const ImageUpload = (props: any) => {
         pctg={pctg}
         ocrText={ocrText}
       /> */}
-    </div>
+    </>
   );
 };
 

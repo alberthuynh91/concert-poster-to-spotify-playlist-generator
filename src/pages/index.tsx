@@ -43,7 +43,7 @@ const LoggedIn = (props: any) => {
     setIsLoading,
   } = props;
   return (
-    <>
+    <Box px={{ xs: 0, sm: 2, md: 8, lg: 20, xl: 40 }}>
       <Box sx={{ fontWeight: 'light', fontSize: 14, textAlign: 'right' }}>
         Signed in as {session?.token?.email}{' '}
         <Button onClick={() => signOut()}>Sign out</Button>
@@ -62,7 +62,7 @@ const LoggedIn = (props: any) => {
           setIsLoading={setIsLoading}
         />
       )}
-    </>
+    </Box>
   );
 };
 

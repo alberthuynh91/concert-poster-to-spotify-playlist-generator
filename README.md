@@ -20,10 +20,15 @@ Playlist
 - Use uploaded image as album cover for created Spotify playlist
 - Allow user to customize name / description of playlist
 - Allow user to add more than 100 tracks to a playlist at a time
-- Add error handling
+- Add error handling for API calls
 
 Deploy
+
 - Fix Netlify deployment
+
+Styling
+
+- Add styling for mobile
 
 ## Getting Started
 

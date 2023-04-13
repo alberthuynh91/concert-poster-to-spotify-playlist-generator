@@ -1,15 +1,8 @@
-.artistsContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-bottom: 2rem;
-
-}
-
 .card {
+  width: 100%;
   border: 1px solid gray;
   display: flex;
   flex-direction: row;
-  
   background: none;
 	color: inherit;
 	padding: 0;

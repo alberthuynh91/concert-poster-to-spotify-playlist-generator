@@ -5,6 +5,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -69,18 +71,22 @@ const Artists = (props: any) => {
           Unselect All
         </Button>
       </div>
-      <div className={styles.artistsContainer}>
-        {artists.map((artist: ArtistType) => {
-          return (
-            <Artist
-              key={artist.id}
-              {...artist}
-              // @ts-expect-error
-              setArtistListObject={setArtistListObject}
-            />
-          );
-        })}
-      </div>
+      <Box mb={4} sx={{ flexGrow: 1 }}>
+        <Grid container columns={{ xs: 1, sm: 12, md: 12 }}>
+          {artists.map((artist: ArtistType, index: number) => {
+            return (
+              <Grid item xs={1} sm={6} md={6} key={index}>
+                <Artist
+                  key={artist.id}
+                  {...artist}
+                  // @ts-expect-error
+                  setArtistListObject={setArtistListObject}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
     </>
   );
 };
