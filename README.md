@@ -27,9 +27,9 @@ Playlist
 - Allow user to add more than 100 tracks to a playlist at a time
 - Add error handling for API calls
 
-Deploy
+Auth
 
-- Fix Netlify deployment
+- Test Spotify AUTH with multiple user accounts 
 
 Styling
 
