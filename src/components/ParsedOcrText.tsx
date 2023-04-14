@@ -29,3 +29,5 @@ const ParsedOcrText = (props: any) => {
     </div>
   );
 };
+
+export default ParsedOcrText;
