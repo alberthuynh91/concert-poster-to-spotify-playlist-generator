@@ -17,7 +17,6 @@ Clean up
 
 Artists
 
-- On hover of artist card, play music snippet from artist
 - Open modal with more info on artist on hover or on click of artist icon/name
 
 Playlist
