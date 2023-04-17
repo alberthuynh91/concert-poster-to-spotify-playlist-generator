@@ -17,7 +17,6 @@ Clean up
 
 Artists
 
-- On hover of artist card, play music snippet from artist
 - Open modal with more info on artist on hover or on click of artist icon/name
 
 Playlist
@@ -27,9 +26,9 @@ Playlist
 - Allow user to add more than 100 tracks to a playlist at a time
 - Add error handling for API calls
 
-Deploy
+Auth
 
-- Fix Netlify deployment
+- Test Spotify AUTH with multiple user accounts 
 
 Styling
 
