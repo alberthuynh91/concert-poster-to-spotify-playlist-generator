@@ -5,6 +5,7 @@ import { ArtistType } from '../types';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import {
   createPlaylistForUser,
   addTracksToPlaylist,
@@ -19,8 +20,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const Spotify = (props: any) => {
-  const { artistListObject, setArtistListObject, isLoading, setIsLoading } =
-    props;
+  const { artistListObject, setArtistListObject, isLoading } = props;
   const { data: session } = useSession();
   const [tracks, setTracks] = useState([]);
   const [trackUris, setTrackUris] = useState([]);
@@ -86,7 +86,14 @@ const Spotify = (props: any) => {
     getTopTracksForSelectedArtists();
   }, [artistListObject]);
 
-  if (artistListObject.length === 0) return null;
+  if (artistListObject.length === 0 && tracks.length === 0) {
+    return (
+      <Box sx={{ textAlign: 'center' }}>
+        Unable to scan image/no artists found. Try uploading a different concert
+        poster.
+      </Box>
+    );
+  }
 
   return (
     <>

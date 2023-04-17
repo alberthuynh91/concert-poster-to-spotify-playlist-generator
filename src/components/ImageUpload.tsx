@@ -8,6 +8,7 @@ import LinearProgress, {
 } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import { parseArtistsFromOcrString, getArtistList } from '@/utils';
+// import ParsedOcrText from '@/components/ParsedOcrText';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 import 'filepond/dist/filepond.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -51,8 +52,8 @@ const ImageUpload = (props: any) => {
     // @ts-expect-error
     await workerRef.current.setParameters({
       // tessedit_char_whitelist: '0123456789',
-      preserve_interword_spaces: '1',
-      textord_tabfind_vertical_text: '1',
+      // preserve_interword_spaces: '0',
+      // textord_tabfind_vertical_text: '1',
     });
     // sending the File Object into the Recognize function to parse the data
     // @ts-expect-error
@@ -60,6 +61,7 @@ const ImageUpload = (props: any) => {
     const {
       data: { text },
     } = response;
+    console.log(`OCR TEXT: `, text);
     setOcrText(text);
     const artistStrings = parseArtistsFromOcrString(text);
     const artistObjectList = await getArtistList(artistStrings);
