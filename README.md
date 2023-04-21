@@ -2,7 +2,7 @@
 
 ![Apr-21-2023 12-18-40](https://user-images.githubusercontent.com/5342581/233717484-0daaaca6-374b-4115-9266-85af85d81b78.gif)
 
-Creates a spotify playlist using the artists listed on a concert poster
+Create a spotify playlist from a concert poster 
 
 ## Backlog
 
@@ -25,7 +25,7 @@ Playlist
 
 - Use uploaded image as album cover for created Spotify playlist
 - Allow user to customize name / description of playlist
-- Allow user to add more than 100 tracks to a playlist at a time
+- Allow user to add more than 100 tracks to a playlist at a time (currently we only select 3 songs per artist)
 - Add error handling for API calls
 
 Auth
