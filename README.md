@@ -1,5 +1,7 @@
 # Concert Poster to Spotify Playlist Generator
 
+![Apr-21-2023 12-18-40](https://user-images.githubusercontent.com/5342581/233717484-0daaaca6-374b-4115-9266-85af85d81b78.gif)
+
 Creates a spotify playlist using the artists listed on a concert poster
 
 ## Backlog
