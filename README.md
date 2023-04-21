@@ -8,8 +8,8 @@ Create a spotify playlist from a concert poster
 
 OCR
 
-- Improve image processing to get artist names more accurately
-- Improve filtering method to get artist names more accurately from OCR text
+- Improve [image processing](https://github.com/alberthuynh91/concert-poster-to-spotify-playlist-generator/blob/4a78e2d979511214d90bb758fbb17bb7cb5302db/src/components/ImageUpload.tsx#L44) to scrape artist names more accurately from an uploaded concert postet image
+- Improve [filtering method](https://github.com/alberthuynh91/concert-poster-to-spotify-playlist-generator/blob/089da6252a6678732b4abc0a735fa3616879e61f/src/utils.ts#L6) to parse artist names more accurately from OCR text
 
 Clean up
 
@@ -28,13 +28,13 @@ Playlist
 - Allow user to add more than 100 tracks to a playlist at a time (currently we only select 3 songs per artist)
 - Add error handling for API calls
 
-Auth
+Testing
 
 - Test Spotify AUTH with multiple user accounts 
 
-Styling
+Accessibility
 
-- Add styling for mobile
+- Use lighthouse to check accessibility score / improve accessibility
 
 ## Getting Started
 
