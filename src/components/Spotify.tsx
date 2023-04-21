@@ -20,7 +20,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const Spotify = (props: any) => {
-  const { artistListObject, setArtistListObject, isLoading } = props;
+  const { artists, setArtists, isLoading } = props;
   const { data: session } = useSession();
   const [tracks, setTracks] = useState([]);
   const [trackUris, setTrackUris] = useState([]);
@@ -38,7 +38,7 @@ const Spotify = (props: any) => {
   };
 
   const handleSelectAll = () => {
-    setArtistListObject((prevList: any) => {
+    setArtists((prevList: any) => {
       const updated = prevList.slice().map((item: any) => {
         item.selected = true;
         return item;
@@ -48,7 +48,7 @@ const Spotify = (props: any) => {
   };
 
   const handleUnselectAll = () => {
-    setArtistListObject((prevList: any) => {
+    setArtists((prevList: any) => {
       const updated = prevList.slice().map((item: any) => {
         item.selected = false;
         return item;
@@ -66,7 +66,7 @@ const Spotify = (props: any) => {
 
   useEffect(() => {
     async function getTopTracksForSelectedArtists() {
-      const filteredList = artistListObject.filter(
+      const filteredList = artists.filter(
         (artist: any) => artist.selected === true
       );
       const promises = filteredList.map((artist: ArtistType) =>
@@ -84,16 +84,9 @@ const Spotify = (props: any) => {
       setTrackUris(trackUris);
     }
     getTopTracksForSelectedArtists();
-  }, [artistListObject]);
+  }, [artists]);
 
-  if (artistListObject.length === 0 && tracks.length === 0) {
-    return (
-      <Box sx={{ textAlign: 'center' }}>
-        Unable to scan image/no artists found. Try uploading a different concert
-        poster.
-      </Box>
-    );
-  }
+  if (artists.length === 0 && tracks.length === 0) return null;
 
   return (
     <>
@@ -111,10 +104,10 @@ const Spotify = (props: any) => {
       {!isLoading && (
         <>
           <Artists
-            artists={artistListObject}
+            artists={artists}
             handleSelectAll={handleSelectAll}
             handleUnselectAll={handleUnselectAll}
-            setArtistListObject={setArtistListObject}
+            setArtists={setArtists}
           />
           <Button
             className="create-btn"

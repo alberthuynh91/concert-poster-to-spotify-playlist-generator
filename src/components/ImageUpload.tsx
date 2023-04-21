@@ -33,8 +33,9 @@ const LinearProgressWithLabel = (
 };
 
 const ImageUpload = (props: any) => {
-  const { setArtistListObject, isLoading, setIsLoading } = props;
+  const { artists, setArtists, setIsLoading } = props;
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasUploaded, setHasUploaded] = useState(false);
   const [ocrText, setOcrText] = useState('');
   const [percentage, setPercentage] = useState('0.00');
   const workerRef = useRef(null);
@@ -65,9 +66,10 @@ const ImageUpload = (props: any) => {
     setOcrText(text);
     const artistStrings = parseArtistsFromOcrString(text);
     const artistObjectList = await getArtistList(artistStrings);
-    setArtistListObject(artistObjectList);
+    setArtists(artistObjectList);
     setIsProcessing(false);
     setIsLoading(false);
+    setHasUploaded(true);
   };
 
   const updateProgressAndLog = (m: any) => {
@@ -107,6 +109,7 @@ const ImageUpload = (props: any) => {
           }}
           onremovefile={(err, fiile) => {
             setOcrText('');
+            setHasUploaded(false);
           }}
         />
       </div>
@@ -117,6 +120,12 @@ const ImageUpload = (props: any) => {
             color="success"
             value={Number(percentage)}
           />
+        </Box>
+      )}
+      {hasUploaded && artists.length === 0 && (
+        <Box sx={{ textAlign: 'center' }}>
+          Unable to scan image/no artists found. Try uploading a different
+          concert poster.
         </Box>
       )}
       {/* <ParsedOcrText

@@ -8,6 +8,7 @@ import LoadingSkeleton from '@/components/LoadingSkeleton';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
+import { ArtistType } from '@/types';
 
 const callbackUrl =
   process.env.NEXT_PUBLIC_ENV === 'dev'
@@ -51,13 +52,7 @@ const LoggedOut = () => {
 };
 
 const LoggedIn = (props: any) => {
-  const {
-    session,
-    artistListObject,
-    setArtistListObject,
-    isLoading,
-    setIsLoading,
-  } = props;
+  const { session, artists, setArtists, isLoading, setIsLoading } = props;
   return (
     <Box py={1} px={{ xs: 2, sm: 2, md: 8, lg: 20, xl: 40 }}>
       <Box sx={{ fontWeight: 'light', fontSize: 14, textAlign: 'right' }}>
@@ -65,15 +60,15 @@ const LoggedIn = (props: any) => {
         <Button onClick={() => signOut()}>Sign out</Button>
       </Box>
       <ImageUpload
-        setArtistListObject={setArtistListObject}
-        isLoading={isLoading}
+        artists={artists}
+        setArtists={setArtists}
         setIsLoading={setIsLoading}
       />
       {isLoading && <LoadingSkeleton />}
-      {artistListObject !== undefined && (
+      {artists !== undefined && (
         <Spotify
-          artistListObject={artistListObject}
-          setArtistListObject={setArtistListObject}
+          artists={artists}
+          setArtists={setArtists}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
         />
@@ -84,7 +79,7 @@ const LoggedIn = (props: any) => {
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const [artistListObject, setArtistListObject] = useState(undefined);
+  const [artists, setArtists] = useState<ArtistType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   if (status === 'loading') return null;
   return (
@@ -102,8 +97,8 @@ export default function Home() {
         {status === 'authenticated' ? (
           <LoggedIn
             session={session}
-            artistListObject={artistListObject}
-            setArtistListObject={setArtistListObject}
+            artists={artists}
+            setArtists={setArtists}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
           />

@@ -17,7 +17,7 @@ const Artist = (props: ArtistType) => {
     name,
     selected,
     // @ts-expect-error
-    setArtistListObject,
+    setArtists,
   } = props;
 
   if (!props.images) return null;
@@ -25,7 +25,7 @@ const Artist = (props: ArtistType) => {
   const src = images[2]?.url || '';
 
   const handleCardClick = (selected: boolean) => {
-    setArtistListObject((prevList: any) => {
+    setArtists((prevList: any) => {
       const newList = prevList.slice();
       const index = newList.findIndex((item: any) => item.id === id);
       newList[index].selected = !selected;
@@ -68,8 +68,8 @@ const Artist = (props: ArtistType) => {
 };
 
 const Artists = (props: any) => {
-  const { artists, handleSelectAll, handleUnselectAll, setArtistListObject } =
-    props;
+  const { artists, handleSelectAll, handleUnselectAll, setArtists } = props;
+  if (artists === null) return null;
   return (
     <>
       <Box>
@@ -92,7 +92,7 @@ const Artists = (props: any) => {
                   key={artist.id}
                   {...artist}
                   // @ts-expect-error
-                  setArtistListObject={setArtistListObject}
+                  setArtists={setArtists}
                 />
               </Grid>
             );
