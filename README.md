@@ -30,7 +30,8 @@ Playlist
 
 Testing
 
-- Test Spotify AUTH with multiple user accounts 
+- Test Spotify AUTH with multiple user accounts
+- Add unit tests
 
 Accessibility
 
